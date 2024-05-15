@@ -13,5 +13,6 @@ public class DemoApplication {
 	// Basically this is the main file of project
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
+		System.out.println("Hello world");
 	}
 }
