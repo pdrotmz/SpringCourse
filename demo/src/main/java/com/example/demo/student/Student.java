@@ -29,6 +29,9 @@ public class Student {
     private Integer age;
     private LocalDate dob; // Date of Birth
 
+    public Student() {
+    }
+
     // constructor method
     public Student(Long id,
                    String name,
