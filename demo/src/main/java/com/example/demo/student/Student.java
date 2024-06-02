@@ -1,6 +1,7 @@
 package com.example.demo.student;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity // Define this class as a entity for hibernate
 @Table // Define this class as a db table
@@ -26,6 +28,7 @@ public class Student {
     private Long id;
     private String name;
     private String email;
+    @Transient // Basically makes the age won't be a column on db
     private Integer age;
     private LocalDate dob; // Date of Birth
 
@@ -36,23 +39,19 @@ public class Student {
     public Student(Long id,
                    String name,
                    String email,
-                   LocalDate dob,
-                   Integer age) {
+                   LocalDate dob) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.dob = dob;
-        this.age = age;
     }
 
     // constructor methood without id because id gotta autoincrement
     public Student(String name,
                    String email,
-                   Integer age,
                    LocalDate dob) {
         this.name = name;
         this.email = email;
-        this.age = age;
         this.dob = dob;
     }
 
@@ -82,7 +81,8 @@ public class Student {
     }
 
     public Integer getAge() {
-        return age;
+        // Well, this function return the calculate of date of today minus the dob user
+        return Period.between(this.dob, LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
