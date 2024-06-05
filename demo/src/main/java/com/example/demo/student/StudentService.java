@@ -2,10 +2,13 @@ package com.example.demo.student;
 
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class StudentService {
@@ -42,4 +45,24 @@ public class StudentService {
 		studentRepository.deleteById(studentId);
 	}
 	
+	@Transactional
+	public void updateStudent(Long studentId, String name, String email) {
+		Student student = studentRepository.findById(studentId).orElseThrow(() -> new IllegalStateException(
+			"student with id " + studentId + " does not exists"
+		));
+
+		if (name != null && name.length() > 0 && !Objects.equals(student.getName(), name)) {
+			student.setName(name);
+		}
+
+		if (email != null && email.length() > 0 && !Objects.equals(student.getEmail(), email)) {
+			Optional<Student> studeOptional = studentRepository.findStudentByEmail(email);
+			
+			if (studeOptional.isPresent()) {
+				throw new IllegalStateException("email taken");
+			}
+
+			student.setEmail(email);
+		}
+	}
 }
